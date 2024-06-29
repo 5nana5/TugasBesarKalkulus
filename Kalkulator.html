@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalkulator Persamaan Kuadrat</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- Custom CSS -->
+  <style>
+    body {
+      padding: 50px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2 class="mb-4">Tugas Besar Kalkulus</h2>
+    <h3 class="mb-4">Nanda Rahayu Widiyanti, Teknik Informatika</h3>
+
+    <h4>Kalkulator Persamaan Kuadrat</h4>
+    <form id="quadraticForm">
+      <div class="form-group">
+        <label for="a">Masukkan nilai a:</label>
+        <input type="number" class="form-control" id="a" name="a" required>
+      </div>
+      <div class="form-group">
+        <label for="b">Masukkan nilai b:</label>
+        <input type="number" class="form-control" id="b" name="b" required>
+      </div>
+      <div class="form-group">
+        <label for="c">Masukkan nilai c:</label>
+        <input type="number" class="form-control" id="c" name="c" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Hitung</button>
+    </form>
+    <div id="result" class="mt-4"></div>
+    <p id="time" class="mt-4">Current Time: </p>
+  </div>
+
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+  <!-- Custom JavaScript -->
+  <script>
+    // Function to solve quadratic equation
+    function solveQuadratic(a, b, c) {
+      var result = {};
+      var discriminant = b * b - 4 * a * c;
+
+      if (discriminant > 0) {
+        result.type = "real";
+        result.x1 = (-b + Math.sqrt(discriminant)) / (2 * a);
+        result.x2 = (-b - Math.sqrt(discriminant)) / (2 * a);
+      } else if (discriminant === 0) {
+        result.type = "real and equal";
+        result.x = -b / (2 * a);
+      } else {
+        result.type = "complex";
+        var realPart = -b / (2 * a);
+        var imaginaryPart = Math.sqrt(-discriminant) / (2 * a);
+        result.x1 = realPart + " + " + imaginaryPart + "i";
+        result.x2 = realPart + " - " + imaginaryPart + "i";
+      }
+
+      return result;
+    }
+
+    // Function to handle form submission
+    document.getElementById('quadraticForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      var a = parseInt(document.getElementById('a').value);
+      var b = parseInt(document.getElementById('b').value);
+      var c = parseInt(document.getElementById('c').value);
+
+      var resultElement = document.getElementById('result');
+      var result = solveQuadratic(a, b, c);
+
+      if (result.type === "real") {
+        resultElement.innerHTML = `<div class="alert alert-success" role="alert">answer: x1 = ${result.x1}, x2 = ${result.x2}</div>`;
+      } else if (result.type === "real and equal") {
+        resultElement.innerHTML = `<div class="alert alert-success" role="alert">answer: x = ${result.x}</div>`;
+      } else if (result.type === "complex") {
+        resultElement.innerHTML = `<div class="alert alert-warning" role="alert">not found</div>`;
+      }
+    });
+
+    // Function to update real-time clock
+    function updateClock() {
+      var now = new Date();
+      var hours = now.getHours();
+      var minutes = now.getMinutes();
+      var seconds = now.getSeconds();
+
+      // Format time as HH:mm:ss
+      var timeString = hours.toString().padStart(2, '0') + ':' +
+                      minutes.toString().padStart(2, '0') + ':' +
+                      seconds.toString().padStart(2, '0');
+
+      // Update the #time element
+      document.getElementById('time').textContent = 'Current Time: ' + timeString;
+    }
+
+    // Update the clock every second
+    setInterval(updateClock, 1000);
+  </script>
+</body>
+</html>
